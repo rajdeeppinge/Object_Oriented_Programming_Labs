@@ -1,0 +1,88 @@
+
+public class AddAndSearch {
+	private Node head;
+	private Node curr;
+	
+	public AddAndSearch(){
+		head = curr = null;
+	}
+	
+	public void addEmployee(Employee newEmployee){
+		Node newNode = new Node(newEmployee);
+		if(head == null){		//if array is empty, newEmployee is at the head
+			head = newNode;
+		}
+		else{
+			curr = head;
+			while(curr.getLeft() != null || curr.getRight() != null){		//run the loop till leaf node is reached
+				if(newEmployee.getTenure() > curr.getData().getTenure()){
+					if(curr.getRight() == null)			//the element has greater tenure than curr so it will be stored on right side. If right side of curr is empty then break loop and store element then and there, else go to right side of curr.
+						break;
+					else
+						curr = curr.getRight();
+				}
+				else if(newEmployee.getTenure() < curr.getData().getTenure()){
+					if(curr.getLeft() == null)			//similar to above comment
+						break;
+					else
+						curr = curr.getLeft();
+				}
+				else if(newEmployee.getSalary() > curr.getData().getSalary()){
+					if(curr.getRight() == null)			//the element has greater salary than curr so it will be stored on right side. If right side of curr is empty then break loop and store element then and there, else go to right side of curr.
+						break;
+					else
+						curr = curr.getRight();
+				}
+				else if(newEmployee.getSalary() < curr.getData().getSalary()){
+					if(curr.getLeft() == null)			//similar to above comment
+						break;
+					else
+						curr = curr.getLeft();
+				}
+				else if(curr.getLeft() != null)			//if both tenure and salary are equal then element should be stored on the left side of curr but if left side is not empty go to the node on left
+					curr = curr.getLeft();
+				else
+					break;
+			}
+			if(newEmployee.getTenure() > curr.getData().getTenure()){
+				curr.setRight(newNode);
+				curr = newNode;
+			}
+			else if(newEmployee.getTenure() < curr.getData().getTenure()){
+				curr.setLeft(newNode);
+				curr = newNode;
+			}
+			else if(newEmployee.getSalary() > curr.getData().getSalary()){
+				curr.setRight(newNode);
+				curr = newNode;
+			}
+			else{
+				curr.setLeft(newNode);
+				curr = newNode;
+			}
+		}
+	}
+	
+	public Employee[] searchEmployee(int tenure, int salary){
+		Employee[] query = new Employee[100];
+		int count = 0;
+		curr = head;
+		while(curr != null){
+			if(tenure == curr.getData().getTenure() && salary == curr.getData().getSalary()){
+				query[count] = curr.getData();
+				curr = curr.getLeft();
+				count++;
+			}
+			else if(tenure > curr.getData().getTenure())
+				curr = curr.getRight();
+			else if(tenure < curr.getData().getTenure())
+				curr = curr.getLeft();
+			else if(salary > curr.getData().getSalary())
+				curr = curr.getRight();
+			else if(salary < curr.getData().getSalary())
+				curr = curr.getLeft(); 
+		}
+		
+		return query;
+	}
+}

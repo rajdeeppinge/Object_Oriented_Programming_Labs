@@ -1,0 +1,90 @@
+
+public class AddAndSearch {
+	private Node head;
+	private Node curr;
+	
+	public AddAndSearch(){
+		head = curr = null;
+	}
+	
+	public void addEmployee(Employee newEmployee){
+		Node newNode = new Node(newEmployee);
+		if(head == null){
+			head = newNode;
+		}
+		else{
+			curr = head;
+	//		System.out.println(curr.getData().getId());
+			while(curr.getLeft() != null || curr.getRight() != null){
+				if(newEmployee.getTenure() > curr.getData().getTenure()){
+					if(curr.getRight() == null)
+						break;
+					else
+						curr = curr.getRight();
+				}
+				else if(newEmployee.getTenure() < curr.getData().getTenure()){
+					if(curr.getLeft() == null)
+						break;
+					else
+						curr = curr.getLeft();
+				}
+				else if(newEmployee.getSalary() > curr.getData().getSalary()){
+					if(curr.getRight() == null)
+						break;
+					else
+						curr = curr.getRight();
+				}
+				else if(newEmployee.getSalary() < curr.getData().getSalary()){
+					if(curr.getLeft() == null)
+						break;
+					else
+						curr = curr.getLeft();
+				}
+				else if(curr.getLeft() != null)
+					curr = curr.getLeft();
+				else
+					break;
+			}
+			if(newEmployee.getTenure() > curr.getData().getTenure()){
+				curr.setRight(newNode);
+			}
+			else if(newEmployee.getTenure() < curr.getData().getTenure()){
+				curr.setLeft(newNode);
+			}
+			else if(newEmployee.getSalary() > curr.getData().getSalary()){
+				curr.setRight(newNode);
+			}
+			else{
+				curr.setLeft(newNode);
+			}
+		}
+	//	System.out.println(head.getRight().getData().getSalary());
+	//	System.out.println("added");
+	}
+	
+	public Employee[] searchEmployee(int tenure, int salary){
+		Employee[] query = new Employee[100];
+		int count = 0;
+		curr = head;
+	//	System.out.println(curr.getData().getSalary());
+		while(curr != null){
+			if(tenure == curr.getData().getTenure() && salary == curr.getData().getSalary()){
+				query[count] = curr.getData();
+				curr = curr.getLeft();	
+			}
+			else if(tenure > curr.getData().getTenure())
+				curr = curr.getRight();
+			else if(tenure < curr.getData().getTenure())
+				curr = curr.getLeft();
+			else if(tenure > curr.getData().getSalary())
+				curr = curr.getRight();
+			else if(tenure < curr.getData().getSalary())
+				curr = curr.getLeft(); 
+//			else
+//				curr = curr.getLeft();
+			System.out.println(curr.getData().getSalary());
+		}
+		
+		return query;
+	}
+}
